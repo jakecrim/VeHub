@@ -7,7 +7,6 @@
 
 /* Variables */
 
-
 //Declarations
 esp_now_recv_cb_t receive_message(void);
 esp_now_send_cb_t sent_message(void);
@@ -17,7 +16,7 @@ void tasks_Open();
 
 int main(void)
 {
-	printf("TacoSense System Start: \n");
+	printf("VeHub System Start: \n");
 	tasks_Open();
 	sensors_Open();
 	wireless_Open();
@@ -31,7 +30,7 @@ int main(void)
 void tasks_Open()
 {
 	xTaskCreate(vTransmitTask, "Transmit Task", TRANSMIT_TASK_STACK_SIZE, NULL, TRANSMIT_TASK_PRIO, NULL);
-	xTaskCreate(vSensorTask, "Sensor Task", SENSOR_TASK_STACK_SIZE, NULL, SENSOR_TASK_PRIO, NULL);
+	// xTaskCreate(vSensorTask, "Sensor Task", SENSOR_TASK_STACK_SIZE, NULL, SENSOR_TASK_PRIO, NULL);
 }
 
 void setup() 
