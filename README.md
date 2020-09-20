@@ -1,1 +1,1 @@
-*** W.I.P. Central Hub for all sensors I am outfitting my current vehicle with ***
+*** W.I.P. Hub device for all sensors, displays, etc I am outfitting my current vehicle with ***
