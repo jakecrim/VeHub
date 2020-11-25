@@ -2,8 +2,8 @@
 #include <esp_now.h>
 #include <WiFi.h>
 #include "transmission.h"
-#include "sensors.h"
-#include "TSconfig.h"
+#include "visualizeSensors.h"
+#include "VHconfig.h"
 
 /* Variables */
 
@@ -18,7 +18,7 @@ int main(void)
 {
 	printf("VeHub System Start: \n");
 	tasks_Open();
-	sensors_Open();
+	visualizeSensors_Open();
 	wireless_Open();
 	for(;;)
 	{
@@ -30,7 +30,7 @@ int main(void)
 void tasks_Open()
 {
 	xTaskCreate(vTransmitTask, "Transmit Task", TRANSMIT_TASK_STACK_SIZE, NULL, TRANSMIT_TASK_PRIO, NULL);
-	// xTaskCreate(vSensorTask, "Sensor Task", SENSOR_TASK_STACK_SIZE, NULL, SENSOR_TASK_PRIO, NULL);
+	// xTaskCreate(vVisualizeSensorsTask, "Visualize Sensors Task", VISUALIZE_SENSORS_TASK_STACK_SIZE, NULL, VISUALIZE_SENSORS_TASK_PRIO, NULL);
 }
 
 void setup() 

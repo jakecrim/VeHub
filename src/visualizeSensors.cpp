@@ -1,11 +1,11 @@
-#include "sensors.h"
+#include "visualizeSensors.h"
 
-void sensors_Open()
+void visualizeSensors_Open()
 {
 	printf("Initializing Hardware: \n");
 }
 
-void vSensorTask(void * parameter)
+void vVisualizeSensorsTask(void * parameter)
 {
 	for(;;)
 	{
