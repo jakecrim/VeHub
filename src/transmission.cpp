@@ -1,5 +1,73 @@
 #include "transmission.h"
 
+// Globals
+transcieve_message dataDevice1, dataDevice2;
+
+void vVisualizeSensorsTask(void * parameter)
+{
+	
+	for(;;)
+	{
+		vTaskDelay(1000 / portTICK_PERIOD_MS);
+		printf("Visualizing received sensor data: \n");
+		printf("-----------------------\n");
+		printf("\t CURRENT DISTANCES\n");
+		printf("F.L. --> %d cm \n", dataDevice1.distance1);
+		// printf("F.M. --> %d cm \n", dataDevice1.distance2);
+		// printf("F.R. --> %d cm \n", dataDevice1.distance3);
+		printf("Rear --> %d cm \n", dataDevice2.distance1);
+		printf("-----------------------\n");
+	}
+}
+
+// When a message comes in from ESP-NOW, handle storage of most recent data packet
+void receiveCallback(const uint8_t *macAddr, const uint8_t *data, int dataLen)
+{
+	// transcieve_message recieved;
+	// memcpy(&recieved, data, sizeof(data));
+	// printf("Bytes Recieved: %d \n", dataLen);
+	// printf("Distance: %d \n", recieved.distance1);
+
+	transcieve_message tempData;
+	// check to see if the incomming message
+	memcpy(&tempData, data, dataLen);
+	if(tempData.deviceNum == 1)
+		memcpy(&dataDevice1, &tempData, sizeof(tempData));
+	else if(tempData.deviceNum == 2)
+		memcpy(&dataDevice2, &tempData, sizeof(tempData));
+
+	printf("-- Recent Data Packet Debug Stats --- \n");
+	printf("Bytes Recieved: %d \n", dataLen);
+	printf("Distance: %d \n", tempData.distance1);
+	printf("Distance: %d \n", tempData.distance2);
+	printf("Distance: %d \n", tempData.distance3);
+	printf("Device Number: %d \n", tempData.deviceNum);
+	
+
+}
+
+void wireless_Open()
+{
+	WiFi.mode(WIFI_STA);
+	Serial.print("Station Mode: \n");
+	Serial.println("MAC Addr: ");
+	Serial.print(WiFi.macAddress());
+	WiFi.disconnect();
+	if (esp_now_init() == ESP_OK)
+	{
+		printf("\n ESP-NOW Initialized \n");
+		esp_now_register_recv_cb(receiveCallback);
+		// esp_now_register_send_cb(sent_message);
+	}
+	else
+	{
+		printf("ESP-NOW Init Failed...restarting \n");
+		delay(500);
+		ESP.restart();
+	}
+	
+}
+
 // Main Transmitting Task
 void vTransmitTask(void * parameter)
 {
@@ -54,37 +122,4 @@ void transmit(transcieve_message data)
 	{
 		Serial.println("Unknown error");
 	}
-}
-
-
-// When a message comes in from ESP-NOW, this called and makes a call to handle the correct lighting and display info
-void receiveCallback(const uint8_t *macAddr, const uint8_t *data, int dataLen)
-{
-	transcieve_message recieved;
-	memcpy(&recieved, data, sizeof(data));
-	printf("Bytes Recieved: %d \n", dataLen);
-
-	printf("Distance: %d \n", recieved.distance1);
-}
-
-void wireless_Open()
-{
-	WiFi.mode(WIFI_STA);
-	Serial.print("Station Mode: \n");
-	Serial.println("MAC Addr: ");
-	Serial.print(WiFi.macAddress());
-	WiFi.disconnect();
-	if (esp_now_init() == ESP_OK)
-	{
-		printf("\n ESP-NOW Initialized \n");
-		esp_now_register_recv_cb(receiveCallback);
-		// esp_now_register_send_cb(sent_message);
-	}
-	else
-	{
-		printf("ESP-NOW Init Failed...restarting \n");
-		delay(500);
-		ESP.restart();
-	}
-	
 }

@@ -13,13 +13,17 @@ esp_now_send_cb_t sent_message(void);
 void transmit(transcieve_message data);
 void tasks_Open();
 
+void tasks_Open()
+{
+	// xTaskCreate(vTransmitTask, "Transmit Task", TRANSMIT_TASK_STACK_SIZE, NULL, TRANSMIT_TASK_PRIO, NULL);
+	xTaskCreate(vVisualizeSensorsTask, "Visualize Sensors Task", VISUALIZE_SENSORS_TASK_STACK_SIZE, NULL, VISUALIZE_SENSORS_TASK_PRIO, NULL);
+}
 
 int main(void)
 {
 	printf("VeHub System Start: \n");
-	tasks_Open();
-	visualizeSensors_Open();
 	wireless_Open();
+	tasks_Open();
 	for(;;)
 	{
 		delay(10000);
@@ -27,11 +31,7 @@ int main(void)
 	}
 }
 
-void tasks_Open()
-{
-	xTaskCreate(vTransmitTask, "Transmit Task", TRANSMIT_TASK_STACK_SIZE, NULL, TRANSMIT_TASK_PRIO, NULL);
-	// xTaskCreate(vVisualizeSensorsTask, "Visualize Sensors Task", VISUALIZE_SENSORS_TASK_STACK_SIZE, NULL, VISUALIZE_SENSORS_TASK_PRIO, NULL);
-}
+
 
 void setup() 
 {
