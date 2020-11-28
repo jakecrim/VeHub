@@ -1,34 +1,57 @@
 #include "transmission.h"
 
+// Constructor for transcieve_message struct
+transcieve_message::transcieve_message()
+{
+	deviceNum = 0;
+	distance1 = 0;
+	distance2 = 0;
+	distance3 = 0;
+}
+
+
 // Globals
 transcieve_message dataDevice1, dataDevice2;
 
-void vVisualizeSensorsTask(void * parameter)
+void vLEDVisualizeTask(void * parameter)
 {
 	
 	for(;;)
 	{
+		digitalWrite(LED_F1, HIGH);
+		digitalWrite(LED_F2, HIGH);
 		vTaskDelay(1000 / portTICK_PERIOD_MS);
-		printf("Visualizing received sensor data: \n");
-		printf("-----------------------\n");
-		printf("\t CURRENT DISTANCES\n");
-		printf("F.L. --> %d cm \n", dataDevice1.distance1);
-		// printf("F.M. --> %d cm \n", dataDevice1.distance2);
-		// printf("F.R. --> %d cm \n", dataDevice1.distance3);
-		printf("Rear --> %d cm \n", dataDevice2.distance1);
-		printf("-----------------------\n");
+		digitalWrite(LED_F1, LOW);
+		digitalWrite(LED_F2, LOW);
+		vTaskDelay(1000 / portTICK_PERIOD_MS);
+		// printf("LED Visualizing: \n");
+		
 	}
+}
+
+void vSerialVisualizeTask(void * parameter)
+{
+	for(;;)
+	{
+		vTaskDelay(250 / portTICK_PERIOD_MS);
+		printf("\rVisualizing received sensor data: \n");
+		printf("\r-----------------------\n");
+		printf("\r\t CURRENT DISTANCES\n");
+		printf("\r F.L. --> %d cm \n", dataDevice1.distance1);
+		printf("\r F.M. --> %d cm \n", dataDevice1.distance2);
+		printf("\r F.R. --> %d cm \n", dataDevice1.distance3);
+		printf("\r Rear --> %d cm \n", dataDevice2.distance1);
+		printf("\r-----------------------\n");
+		fflush(stdout);
+	}
+	
 }
 
 // When a message comes in from ESP-NOW, handle storage of most recent data packet
 void receiveCallback(const uint8_t *macAddr, const uint8_t *data, int dataLen)
 {
-	// transcieve_message recieved;
-	// memcpy(&recieved, data, sizeof(data));
-	// printf("Bytes Recieved: %d \n", dataLen);
-	// printf("Distance: %d \n", recieved.distance1);
-
 	transcieve_message tempData;
+
 	// check to see if the incomming message
 	memcpy(&tempData, data, dataLen);
 	if(tempData.deviceNum == 1)
@@ -36,14 +59,20 @@ void receiveCallback(const uint8_t *macAddr, const uint8_t *data, int dataLen)
 	else if(tempData.deviceNum == 2)
 		memcpy(&dataDevice2, &tempData, sizeof(tempData));
 
-	printf("-- Recent Data Packet Debug Stats --- \n");
-	printf("Bytes Recieved: %d \n", dataLen);
-	printf("Distance: %d \n", tempData.distance1);
-	printf("Distance: %d \n", tempData.distance2);
-	printf("Distance: %d \n", tempData.distance3);
-	printf("Device Number: %d \n", tempData.deviceNum);
-	
+	#if DEBUG
+		printf("-- Recent Data Packet Debug Stats --- \n");
+		printf("Bytes Recieved: %d \n", dataLen);
+		printf("Distance: %d \n", tempData.distance1);
+		printf("Distance: %d \n", tempData.distance2);
+		printf("Distance: %d \n", tempData.distance3);
+		printf("Device Number: %d \n", tempData.deviceNum);
+	#endif
+}
 
+void LED_Open()
+{
+	pinMode(LED_F1, OUTPUT);
+	pinMode(LED_F2, OUTPUT);
 }
 
 void wireless_Open()

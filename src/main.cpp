@@ -16,18 +16,20 @@ void tasks_Open();
 void tasks_Open()
 {
 	// xTaskCreate(vTransmitTask, "Transmit Task", TRANSMIT_TASK_STACK_SIZE, NULL, TRANSMIT_TASK_PRIO, NULL);
-	xTaskCreate(vVisualizeSensorsTask, "Visualize Sensors Task", VISUALIZE_SENSORS_TASK_STACK_SIZE, NULL, VISUALIZE_SENSORS_TASK_PRIO, NULL);
+	xTaskCreate(vLEDVisualizeTask, "Visualize with LEDs", LED_VISUALIZE_STACK_SIZE, NULL, LED_VISUALIZE_TASK_PRIO, NULL);
+	xTaskCreate(vSerialVisualizeTask, "Visualize with Serial", SERIAL_VISUALIZE_STACK_SIZE, NULL, SERIAL_VISUALIZE_TASK_PRIO, NULL);
 }
 
 int main(void)
 {
 	printf("VeHub System Start: \n");
 	wireless_Open();
+	LED_Open();
 	tasks_Open();
 	for(;;)
 	{
 		delay(10000);
-		printf("Scheduled FreeRTOS Tasks Running... \n");
+		// printf("Scheduled FreeRTOS Tasks Running... \n");
 	}
 }
 
