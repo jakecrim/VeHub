@@ -15,16 +15,12 @@ transcieve_message dataDevice1, dataDevice2;
 
 void vLEDVisualizeTask(void * parameter)
 {
-	
+	int dutyCycle = 200;	
 	for(;;)
 	{
-		digitalWrite(LED_F1, HIGH);
-		digitalWrite(LED_F2, HIGH);
-		vTaskDelay(1000 / portTICK_PERIOD_MS);
-		digitalWrite(LED_F1, LOW);
-		digitalWrite(LED_F2, LOW);
-		vTaskDelay(1000 / portTICK_PERIOD_MS);
 		// printf("LED Visualizing: \n");
+		ledcWrite(LED_CHANNEL_BASE, dutyCycle);
+		vTaskDelay(15);
 		
 	}
 }
@@ -71,8 +67,8 @@ void receiveCallback(const uint8_t *macAddr, const uint8_t *data, int dataLen)
 
 void LED_Open()
 {
-	pinMode(LED_F1, OUTPUT);
-	pinMode(LED_F2, OUTPUT);
+	ledcSetup(LED_CHANNEL_BASE, FREQ_BASE, RESOLUTION_BASE);
+	ledcAttachPin(LED_F1, LED_CHANNEL_BASE);
 }
 
 void wireless_Open()

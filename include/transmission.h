@@ -4,10 +4,14 @@
 #include <WiFi.h>
 #include <Arduino.h>
 #include "VHconfig.h"
+#include <FastLED.h>
 
 /* Defines */
-#define LED_F1 23
+#define LED_F1 32
 #define LED_F2 22
+#define LED_CHANNEL_BASE 0
+#define FREQ_BASE 5000
+#define RESOLUTION_BASE 8 
 
 
 /* Variables */
