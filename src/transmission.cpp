@@ -1,5 +1,11 @@
 #include "transmission.h"
 
+/* Variables */
+CRGB visualize_fl[1]; // front left visualizer
+CRGB visualize_fm[1]; // front middle visualizer
+CRGB visualize_fr[1]; // front right visualizer
+CRGB visualize_strip[LED_STRIP_LENGTH]
+
 // Constructor for transcieve_message struct
 transcieve_message::transcieve_message()
 {
@@ -15,13 +21,21 @@ transcieve_message dataDevice1, dataDevice2;
 
 void vLEDVisualizeTask(void * parameter)
 {
-	int dutyCycle = 200;	
+
 	for(;;)
 	{
-		// printf("LED Visualizing: \n");
-		ledcWrite(LED_CHANNEL_BASE, dutyCycle);
-		vTaskDelay(15);
-		
+		FastLED.clear();
+		visualize_fl[0] = CRGB(255,255,255);
+		FastLED.show();
+		vTaskDelay(250);		
+		FastLED.clear();
+		visualize_fl[0] = CRGB(255,150,0);
+		FastLED.show();
+		vTaskDelay(250);		
+		FastLED.clear();
+		visualize_fl[0] = CRGB(255,0,0);
+		FastLED.show();
+		vTaskDelay(250);		
 	}
 }
 
@@ -67,8 +81,11 @@ void receiveCallback(const uint8_t *macAddr, const uint8_t *data, int dataLen)
 
 void LED_Open()
 {
-	ledcSetup(LED_CHANNEL_BASE, FREQ_BASE, RESOLUTION_BASE);
-	ledcAttachPin(LED_F1, LED_CHANNEL_BASE);
+	printf("Setting up LEDs: \n");
+	FastLED.addLeds<WS2812B, LED_STRIP, GRB>(visualize_strip, LED_STRIP_LENGTH);
+	// FastLED.addLeds<WS2812B, LED_FM, GRB>(visualize_fm, LED_STRIP_LENGTH);
+	// FastLED.addLeds<WS2812B, LED_FR, GRB>(visualize_fr, LED_STRIP_LENGTH);
+
 }
 
 void wireless_Open()

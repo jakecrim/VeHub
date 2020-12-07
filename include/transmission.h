@@ -7,8 +7,14 @@
 #include <FastLED.h>
 
 /* Defines */
-#define LED_F1 32
-#define LED_F2 22
+//count of LED's on the current strip
+#define LED_STRIP_LENGTH 13
+// GPIO pin for each LED
+#define LED_FL 23
+#define LED_FM 24
+#define LED_FR 0
+#define LED_STRIP 23
+
 #define LED_CHANNEL_BASE 0
 #define FREQ_BASE 5000
 #define RESOLUTION_BASE 8 
