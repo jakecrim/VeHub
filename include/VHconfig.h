@@ -8,6 +8,7 @@
 // priority levels
 #define LED_VISUALIZE_TASK_PRIO 2 
 #define SERIAL_VISUALIZE_TASK_PRIO 2
-// #define TSSINGLE 1
+
+#define VEHUB_F
 // /* OR */
-// #define TSMULTI 0
+// #define VEHUB_B 

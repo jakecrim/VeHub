@@ -20,6 +20,7 @@
 #define RESOLUTION_BASE 8 
 
 
+
 /* Variables */
 struct transcieve_message {
 	int deviceNum;
@@ -31,6 +32,7 @@ struct transcieve_message {
 
 // Declarations
 void LED_Open(void);
+void decideColor(void);
 void vLEDVisualizeTask(void * parameter);
 void vSerialVisualizeTask(void * parameter);
 void vTransmitTask(void * parameter);
