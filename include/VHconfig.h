@@ -9,6 +9,6 @@
 #define LED_VISUALIZE_TASK_PRIO 2 
 #define SERIAL_VISUALIZE_TASK_PRIO 2
 
-#define VEHUB_F
+// #define VEHUB_F
 // /* OR */
-// #define VEHUB_B 
+#define VEHUB_B 
